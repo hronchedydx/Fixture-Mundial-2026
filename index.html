@@ -21,14 +21,16 @@
   .badge{background:var(--accent);color:#000;font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:99px;letter-spacing:.5px;}
 
   .controls{display:flex;gap:10px;align-items:center;flex-wrap:nowrap;}
-  .controls-tz{margin-bottom:6px;}
+  .controls-tz{margin-bottom:0;}
   .controls-filter{flex-wrap:nowrap;}
+  /* Desktop: one single row with both groups */
+  #fixtureControls{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;}
   .tz-btn,.filter-btn,.tab-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all .15s;}
   .tz-btn:hover,.filter-btn:hover{border-color:var(--accent2);color:var(--text);}
   .tz-btn.active{background:var(--accent2);border-color:var(--accent2);color:#fff;}
   .filter-btn:hover{border-color:var(--accent);}
   .filter-btn.active{background:var(--accent);border-color:var(--accent);color:#000;}
-  .sep{width:1px;height:28px;background:var(--border);}
+  .sep{width:1px;height:22px;background:var(--border);flex-shrink:0;}
   .search-wrap{position:relative;margin-left:auto;}
   .search-wrap input{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 12px 6px 32px;border-radius:8px;font-size:.8rem;width:180px;outline:none;transition:border-color .15s;}
   .search-wrap input:focus{border-color:var(--accent2);}
@@ -150,8 +152,11 @@
     .header-top{margin-bottom:8px;gap:8px;}
     .header-top h1{font-size:1.1rem;}
     .badge{display:none;}
+    /* En mobile, fixtureControls vuelve a ser columna */
+    #fixtureControls{flex-direction:column;align-items:stretch;gap:6px;}
+    .desktop-sep{display:none;}
     /* Fila 1: selector de horario — scrolleable horizontal */
-    .controls-tz{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:6px;margin-bottom:6px;}
+    .controls-tz{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:6px;margin-bottom:0;}
     .controls-tz::-webkit-scrollbar{display:none;}
     .tz-label{white-space:nowrap;flex-shrink:0;}
     .tz-btn{padding:5px 10px;font-size:.72rem;white-space:nowrap;flex-shrink:0;}
@@ -174,6 +179,9 @@
     table.standings{font-size:.7rem;}
     table.standings th,table.standings td{padding:5px 4px;}
   }
+    table.standings{font-size:.7rem;}
+    table.standings th,table.standings td{padding:5px 4px;}
+  }
 </style>
 </head>
 <body>
@@ -191,6 +199,7 @@
       <button class="tz-btn"        data-tz="andorra"   onclick="setTZ('andorra')">🇦🇩🇪🇸 AND/ESP</button>
       <button class="tz-btn"        data-tz="argentina" onclick="setTZ('argentina')">🇦🇷 Argentina</button>
     </div>
+    <div class="sep desktop-sep"></div>
     <div class="controls controls-filter">
       <button class="filter-btn active" data-filter="all"         onclick="setFilter('all')">Todos</button>
       <button class="filter-btn"        data-filter="Group Stage" onclick="setFilter('Group Stage')">Grupos</button>
@@ -749,7 +758,7 @@ function renderFixture(){
   var seen={};filtered.forEach(function(m){seen[m[6]]=1;});
   var vCount=Object.keys(seen).length;
   var sh='<div class="stat"><div class="stat-val">'+filtered.length+'</div><div class="stat-lbl">Partidos</div></div>';
-  if(gsCount>0)sh+='<div class="stat"><div class="stat-val">'+gsCount+'</div><div class="stat-lbl">Fase Grupos</div></div>';
+  if(gsCount>0)sh+='<div class="stat"><div class="stat-val">'+gsCount+'</div><div class="stat-lbl">Grupos</div></div>';
   if(koCount>0)sh+='<div class="stat"><div class="stat-val">'+koCount+'</div><div class="stat-lbl">Eliminatoria</div></div>';
   sh+='<div class="stat"><div class="stat-val">'+vCount+'</div><div class="stat-lbl">Sedes</div></div>';
   document.getElementById('statsBar').innerHTML=sh;
