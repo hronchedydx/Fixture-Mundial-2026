@@ -20,7 +20,9 @@
   .header-top h1 span{color:var(--accent);}
   .badge{background:var(--accent);color:#000;font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:99px;letter-spacing:.5px;}
 
-  .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .controls{display:flex;gap:10px;align-items:center;flex-wrap:nowrap;}
+  .controls-tz{margin-bottom:6px;}
+  .controls-filter{flex-wrap:nowrap;}
   .tz-btn,.filter-btn,.tab-btn{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all .15s;}
   .tz-btn:hover,.filter-btn:hover{border-color:var(--accent2);color:var(--text);}
   .tz-btn.active{background:var(--accent2);border-color:var(--accent2);color:#fff;}
@@ -144,21 +146,22 @@
 
   @media(max-width:600px){
     main{padding:10px;}
-    /* Header compacto sticky */
     header{padding:10px 12px 8px;position:sticky;top:0;}
-    .header-top{margin-bottom:6px;gap:8px;}
+    .header-top{margin-bottom:8px;gap:8px;}
     .header-top h1{font-size:1.1rem;}
     .badge{display:none;}
-    /* Controls: dos filas scrolleables en lugar de wrap */
-    .controls{flex-wrap:nowrap;overflow-x:auto;gap:6px;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-    .controls::-webkit-scrollbar{display:none;}
-    .tz-label{display:none;}
-    .sep{display:none;}
+    /* Fila 1: selector de horario — scrolleable horizontal */
+    .controls-tz{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:6px;margin-bottom:6px;}
+    .controls-tz::-webkit-scrollbar{display:none;}
+    .tz-label{white-space:nowrap;flex-shrink:0;}
     .tz-btn{padding:5px 10px;font-size:.72rem;white-space:nowrap;flex-shrink:0;}
+    /* Fila 2: filtros + buscador — scrolleable horizontal */
+    .controls-filter{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:6px;}
+    .controls-filter::-webkit-scrollbar{display:none;}
     .filter-btn{padding:5px 10px;font-size:.72rem;white-space:nowrap;flex-shrink:0;}
-    .search-wrap{flex-shrink:0;margin-left:0;}
-    .search-wrap input{width:130px;}
-    /* Tabs compactos */
+    .search-wrap{flex-shrink:0;margin-left:auto;}
+    .search-wrap input{width:120px;}
+    /* Tabs */
     .tabs{margin:6px -12px -8px;padding-left:8px;gap:2px;overflow-x:auto;flex-wrap:nowrap;}
     .tab-btn{padding:7px 14px;font-size:.75rem;white-space:nowrap;flex-shrink:0;}
     /* Fixture */
@@ -181,17 +184,20 @@
     <span class="badge">104 PARTIDOS</span>
     <span class="badge" style="background:#3b82f6;color:#fff;">USA · CAN · MEX</span>
   </div>
-  <div class="controls" id="fixtureControls">
-    <span class="tz-label" style="font-size:.75rem;color:var(--muted);font-weight:600;">HORARIO:</span>
-    <button class="tz-btn active" data-tz="venue"     onclick="setTZ('venue')">📍 Sede</button>
-    <button class="tz-btn"        data-tz="andorra"   onclick="setTZ('andorra')">🇦🇩🇪🇸 AND/ESP</button>
-    <button class="tz-btn"        data-tz="argentina" onclick="setTZ('argentina')">🇦🇷 Argentina</button>
-    <div class="sep"></div>
-    <button class="filter-btn active" data-filter="all"         onclick="setFilter('all')">Todos</button>
-    <button class="filter-btn"        data-filter="Group Stage" onclick="setFilter('Group Stage')">Grupos</button>
-    <button class="filter-btn"        data-filter="knockout"    onclick="setFilter('knockout')">Eliminatorias</button>
-    <div class="search-wrap">
-      <input type="text" id="search" placeholder="Buscar equipo…" oninput="renderFixture()">
+  <div id="fixtureControls">
+    <div class="controls controls-tz">
+      <span class="tz-label" style="font-size:.75rem;color:var(--muted);font-weight:600;">HORARIO:</span>
+      <button class="tz-btn active" data-tz="venue"     onclick="setTZ('venue')">📍 Sede</button>
+      <button class="tz-btn"        data-tz="andorra"   onclick="setTZ('andorra')">🇦🇩🇪🇸 AND/ESP</button>
+      <button class="tz-btn"        data-tz="argentina" onclick="setTZ('argentina')">🇦🇷 Argentina</button>
+    </div>
+    <div class="controls controls-filter">
+      <button class="filter-btn active" data-filter="all"         onclick="setFilter('all')">Todos</button>
+      <button class="filter-btn"        data-filter="Group Stage" onclick="setFilter('Group Stage')">Grupos</button>
+      <button class="filter-btn"        data-filter="knockout"    onclick="setFilter('knockout')">Eliminatorias</button>
+      <div class="search-wrap">
+        <input type="text" id="search" placeholder="Buscar equipo…" oninput="renderFixture()">
+      </div>
     </div>
   </div>
   <div class="tabs">
@@ -329,6 +335,44 @@ var matches=[
 ["2026-06-27",19,30,"Rep. Dem. Congo","Uzbekistán","Mercedes-Benz Stadium","Atlanta","K","Group Stage"],
 ["2026-06-27",22,0,"Argelia","Austria","Arrowhead Stadium","Kansas City","J","Group Stage"],
 ["2026-06-27",22,0,"Jordania","Argentina","AT&T Stadium","Arlington","J","Group Stage"],
+// ── RONDA DE 32 ──
+["2026-06-28",15,0,"2° Grupo A","2° Grupo B","SoFi Stadium","Inglewood","R32","Round of 32",null,0],
+["2026-06-29",13,0,"1° Grupo C","2° Grupo F","NRG Stadium","Houston","R32","Round of 32",null,1],
+["2026-06-29",16,30,"1° Grupo E","Mejor 3° ABCDF","Gillette Stadium","Foxborough","R32","Round of 32",null,2],
+["2026-06-29",21,0,"1° Grupo F","2° Grupo C","Estadio BBVA","Monterrey","R32","Round of 32",null,3],
+["2026-06-30",13,0,"2° Grupo E","2° Grupo I","AT&T Stadium","Arlington","R32","Round of 32",null,4],
+["2026-06-30",17,0,"1° Grupo I","Mejor 3° CDFGH","MetLife Stadium","East Rutherford","R32","Round of 32",null,5],
+["2026-06-30",21,0,"1° Grupo A","Mejor 3° CEFHI","Estadio Azteca","Mexico City","R32","Round of 32",null,6],
+["2026-07-01",12,0,"1° Grupo L","Mejor 3° EHIJK","Mercedes-Benz Stadium","Atlanta","R32","Round of 32",null,7],
+["2026-07-01",16,0,"1° Grupo G","Mejor 3° AEHIJ","Lumen Field","Seattle","R32","Round of 32",null,8],
+["2026-07-01",20,0,"1° Grupo D","Mejor 3° BEFIJ","Levi's Stadium","Santa Clara","R32","Round of 32",null,9],
+["2026-07-02",15,0,"1° Grupo H","2° Grupo J","SoFi Stadium","Inglewood","R32","Round of 32",null,10],
+["2026-07-02",19,0,"2° Grupo K","2° Grupo L","BMO Field","Toronto","R32","Round of 32",null,11],
+["2026-07-02",23,0,"1° Grupo B","Mejor 3° EFGIJ","BC Place","Vancouver","R32","Round of 32",null,12],
+["2026-07-03",14,0,"2° Grupo D","2° Grupo G","AT&T Stadium","Arlington","R32","Round of 32",null,13],
+["2026-07-03",18,0,"1° Grupo J","2° Grupo H","Hard Rock Stadium","Miami Gardens","R32","Round of 32",null,14],
+["2026-07-03",21,30,"1° Grupo K","Mejor 3° DEIJL","Arrowhead Stadium","Kansas City","R32","Round of 32",null,15],
+// ── OCTAVOS DE FINAL ──
+["2026-07-04",13,0,"Gan. R32 P1","Gan. R32 P2","NRG Stadium","Houston","R16","Round of 16",null,0],
+["2026-07-04",17,0,"Gan. R32 P3","Gan. R32 P4","Lincoln Financial Field","Philadelphia","R16","Round of 16",null,1],
+["2026-07-05",16,0,"Gan. R32 P5","Gan. R32 P6","MetLife Stadium","East Rutherford","R16","Round of 16",null,2],
+["2026-07-05",20,0,"Gan. R32 P7","Gan. R32 P8","Estadio Azteca","Mexico City","R16","Round of 16",null,3],
+["2026-07-06",15,0,"Gan. R32 P9","Gan. R32 P10","AT&T Stadium","Arlington","R16","Round of 16",null,4],
+["2026-07-06",20,0,"Gan. R32 P11","Gan. R32 P12","Lumen Field","Seattle","R16","Round of 16",null,5],
+["2026-07-07",12,0,"Gan. R32 P13","Gan. R32 P14","Mercedes-Benz Stadium","Atlanta","R16","Round of 16",null,6],
+["2026-07-07",16,0,"Gan. R32 P15","Gan. R32 P16","BC Place","Vancouver","R16","Round of 16",null,7],
+// ── CUARTOS DE FINAL ──
+["2026-07-09",16,0,"Gan. R16 P1","Gan. R16 P2","Gillette Stadium","Foxborough","QF","Quarterfinal",null,0],
+["2026-07-10",15,0,"Gan. R16 P3","Gan. R16 P4","SoFi Stadium","Inglewood","QF","Quarterfinal",null,1],
+["2026-07-11",17,0,"Gan. R16 P5","Gan. R16 P6","Hard Rock Stadium","Miami Gardens","QF","Quarterfinal",null,2],
+["2026-07-11",21,0,"Gan. R16 P7","Gan. R16 P8","Arrowhead Stadium","Kansas City","QF","Quarterfinal",null,3],
+// ── SEMIFINALES ──
+["2026-07-14",15,0,"Gan. QF P1","Gan. QF P2","AT&T Stadium","Arlington","SF","Semifinal",null,0],
+["2026-07-15",15,0,"Gan. QF P3","Gan. QF P4","Mercedes-Benz Stadium","Atlanta","SF","Semifinal",null,1],
+// ── TERCER PUESTO ──
+["2026-07-18",17,0,"Perdedor SF1","Perdedor SF2","Hard Rock Stadium","Miami Gardens","3P","Third Place",null,0],
+// ── FINAL ──
+["2026-07-19",15,0,"Gan. SF1","Gan. SF2","MetLife Stadium","East Rutherford","FINAL","Final",null,0],
 ];
 
 // ── STATE ─────────────────────────────────────
@@ -339,8 +383,7 @@ function switchTab(t){
   document.querySelectorAll('.tab-btn').forEach(function(b,i){b.classList.toggle('active',['fixture','standings','bracket'][i]===t);});
   document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
   document.getElementById('tab-'+t).classList.add('active');
-  var fc=document.getElementById('fixtureControls');
-  fc.style.display=(t==='fixture')?'flex':'none';
+  document.getElementById('fixtureControls').style.display=(t==='fixture')?'block':'none';
   if(t==='standings')renderStandings();
   if(t==='bracket')renderBracket();
 }
@@ -673,6 +716,18 @@ function renderBracket(){
   document.getElementById('bracketContent').innerHTML=html;
 }
 
+// ── RESOLVE KNOCKOUT TEAMS FOR FIXTURE VIEW ───
+function resolveKnockoutTeams(group, idx){
+  if(idx===undefined||idx===null)return null;
+  if(group==='R32'){ var t=r32Teams(idx); return {home:t.home,away:t.away}; }
+  if(group==='R16'){ var t=r16Teams(idx); return {home:t.home,away:t.away}; }
+  if(group==='QF'){  var t=qfTeams(idx);  return {home:t.home,away:t.away}; }
+  if(group==='SF'){  var t=sfTeams(idx);  return {home:t.home,away:t.away}; }
+  if(group==='3P'){  var t=thirdTeams();  return {home:t.home,away:t.away}; }
+  if(group==='FINAL'){ var t=finalTeams(); return {home:t.home,away:t.away}; }
+  return null;
+}
+
 // ── FIXTURE FILTER ────────────────────────────
 function getFiltered(){
   var q=document.getElementById('search').value.toLowerCase().trim();
@@ -719,8 +774,17 @@ function renderFixture(){
     dm.forEach(function(m){
       var dateStr=m[0],etH=m[1],etM=m[2],home=m[3],away=m[4],venue=m[5],city=m[6],group=m[7],phase=m[8];
       var time=convertTime(etH,etM,city);
+
+      // For knockout matches, try to resolve real teams from bracket
+      var isKnockout=(phase!=='Group Stage');
+      if(isKnockout){
+        var idx=m[10]; // knockout index stored in position 10
+        var resolved=resolveKnockoutTeams(group,idx);
+        if(resolved){home=resolved.home||home; away=resolved.away||away;}
+      }
+
       var fHome=getFlag(home),fAway=getFlag(away);
-      var mid=mkId(dateStr,home,away);
+      var mid=mkId(dateStr,m[3],m[4]); // use original names for ID
       var sc=scores[mid];
       var hasResult=sc&&sc.h!==''&&sc.a!=='';
       var midEsc=mid.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
@@ -728,12 +792,21 @@ function renderFixture(){
       html+='<div class="card-top"><span class="group-tag '+groupTagClass(group)+'">'+groupLabel(group)+'</span><div class="match-time">'+time+'<small>'+tzLabel()+'</small></div></div>';
       html+='<div class="teams">';
       html+='<span class="team">'+(fHome?'<span class="flag">'+fHome+'</span>':'')+'<span>'+home+'</span></span>';
-      html+='<div class="vs-wrap"><span class="vs">vs</span><span class="score-sep">:</span></div>';
+      html+='<div class="vs-wrap"><span class="vs">vs</span>'+(isKnockout?'':'<span class="score-sep">:</span>')+'</div>';
       html+='<span class="team">'+(fAway?'<span class="flag">'+fAway+'</span>':'')+'<span>'+away+'</span></span>';
       html+='</div>';
-      html+='<div class="score-row'+(hasResult?' has-result':'')+'"><div class="score-side"><input class="score-input score-h" type="number" min="0" max="99" placeholder="-" value="'+(sc?sc.h:'')+'"></div>';
-      html+='<button class="score-save" title="Guardar" onclick="handleSave(this,\''+midEsc+'\')">💾</button>';
-      html+='<div class="score-side"><input class="score-input score-a" type="number" min="0" max="99" placeholder="-" value="'+(sc?sc.a:'')+'"></div></div>';
+      if(!isKnockout){
+        html+='<div class="score-row'+(hasResult?' has-result':'')+'"><div class="score-side"><input class="score-input score-h" type="number" min="0" max="99" placeholder="-" value="'+(sc?sc.h:'')+'"></div>';
+        html+='<button class="score-save" title="Guardar" onclick="handleSave(this,\''+midEsc+'\')">💾</button>';
+        html+='<div class="score-side"><input class="score-input score-a" type="number" min="0" max="99" placeholder="-" value="'+(sc?sc.a:'')+'"></div></div>';
+      } else {
+        // Show result if available, otherwise a note
+        if(hasResult){
+          html+='<div style="text-align:center;padding:6px 0;font-size:1.1rem;font-weight:800;color:var(--accent)">'+sc.h+' – '+sc.a+'</div>';
+        } else {
+          html+='<div style="text-align:center;padding:5px 0;font-size:.7rem;color:var(--muted)">Resultado en pestaña Eliminatorias</div>';
+        }
+      }
       html+='<div class="venue-row"><span style="font-size:.75rem">📍</span><span class="venue-text"><span class="venue-city">'+city+'</span> · '+venue+'</span></div>';
       html+='</div>';
     });
