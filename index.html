@@ -458,7 +458,7 @@ function getBestThirds(grouped){
   var thirds=[];
   Object.keys(grouped).forEach(function(g){
     var t=grouped[g][2];
-    if(t)thirds.push({team:t.team,group:g,pts:t.pts,gf:t.gf,gc:t.gc,diff:t.gf-t.gc});
+    if(t)thirds.push({team:t.team,group:g,pj:t.pj,pts:t.pts,gf:t.gf,gc:t.gc,diff:t.gf-t.gc});
   });
   thirds.sort(function(a,b){
     if(b.pts!==a.pts)return b.pts-a.pts;
@@ -559,7 +559,8 @@ function resolveGroupSlot(slot){
   }
   if(slot.type==='best3'){
     var pool=slot.groups.split('');
-    var top8=thirds.slice(0,8);
+    // Only consider thirds that have actually played matches
+    var top8=thirds.filter(function(c){return c.pj>0;}).slice(0,8);
     var match=top8.find(function(c){return pool.indexOf(c.group)>=0;});
     return match?match.team:null;
   }
